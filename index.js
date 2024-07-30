@@ -14,6 +14,7 @@ async function getOutdated () {
 
         const outdated = Object.entries(o_data).map(([name, { current, wanted, latest }]) => {
             if (excludeList.includes(name)) {
+                console.log("Excluding " + name + " from the list of outdated packages.");
                 return;
             }
             return {

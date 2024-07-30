@@ -1,18 +1,16 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec)
 
 async function getOutdated () {
 
     try {
-        const context = github.context;
-        console.log("context", context);
+        console.log("debug", core.isDebug());
         const path = core.getInput('path');
-        context.debug && console.log("parsing package.json at: " + path + "/package.json");
+        core.isDebug() && console.log("parsing package.json at: " + path + "/package.json");
         const output = await exec('npm outdated --json || true')
-        context.debug && console.log("output of npm outdated: " + output.stdout );
-        context.debug && console.log("error of npm outdated: " + output.stderr );
+        core.isDebug() && console.log("output of npm outdated: " + output.stdout );
+        core.isDebug() && console.log("error of npm outdated: " + output.stderr );
 
         const excludeList_data = core.getInput('exclude-list');
         const excludeList = excludeList_data.split(",").map(item => item.trim());

@@ -26072,20 +26072,26 @@ async function getOutdated () {
         const excludeList = excludeList_data.split(",").map(item => item.trim());
         const o_data = JSON.parse(output.stdout.trim());
 
-        const outdated = Object.entries(o_data).map(([name, { current, wanted, latest }]) => {
-            if (excludeList.includes(name)) {
-                console.log("Excluding " + name + " from the list of outdated packages.");
-                return;
+        const outdated = Object.entries(o_data).filter(item => {
+            if (excludeList.includes(item[0])) {
+                console.log("Excluding " + item[0] + " from the list of outdated packages.");
+                return false;
             }
-            return {
-                name,
-                current,
-                wanted,
-                latest
-            }
+            return true;
+        }).map(([name, { current, wanted, latest }]) => {
+            return [name, current, latest];
         });
         if (outdated.length > 0) {
             core.setFailed("These packages are outdated: " + JSON.stringify(outdated));
+            const header = [
+                {data: "Name", header: true},
+                {data: "Current", header: true},
+                {data: "Latest", header: true},
+            ];
+            await core.summary
+                .addHeading('Outdated packages :broom:')
+                .addTable([header, ...outdated])
+                .write();
         } else {
             console.log("Everything is up to date. Enjoy!");
         }

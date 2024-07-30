@@ -7,6 +7,7 @@ async function getOutdated () {
 
     try {
         const context = github.context;
+        console.log("context", context);
         const path = core.getInput('path');
         context.debug && console.log("parsing package.json at: " + path + "/package.json");
         const output = await exec('npm outdated --json || true')

@@ -1,0 +1,17 @@
+name: "Npm outdated"
+description: "Check if your installed packages are outdated"
+branding:
+  icon: "wind"
+  color: "red"
+inputs:
+  path:
+    description: "Location of your package.json file"
+    required: false
+    default: "."
+  exclude-list:
+    description: "packages to exclude from the check, separated by a comma"
+    required: false
+    default: ""
+runs:
+  using: "node20"
+  main: "index.js"
